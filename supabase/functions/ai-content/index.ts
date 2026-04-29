@@ -33,8 +33,9 @@ serve(async (req) => {
     }
 
     const { sectionTitle, sectionContent, templateCategory, proposalTitle } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    const openaiApiKey = Deno.env.get("OPENAI_API_KEY");
+    const openaiModel = Deno.env.get("OPENAI_MODEL") || "gpt-4o-mini";
+    if (!openaiApiKey) throw new Error("OPENAI_API_KEY is not configured");
 
     const systemPrompt = `You are an expert business proposal writer. Your job is to improve proposal section content to be more professional, persuasive, and clear. 
 Keep the same general meaning but make it:
@@ -48,18 +49,19 @@ Section: "${sectionTitle || "Untitled Section"}"
 
 Return ONLY the improved content text. No explanations, no markdown headers, just the improved section content.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${openaiApiKey}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: openaiModel,
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: sectionContent || "Write initial content for this section." },
         ],
+        temperature: 0.4,
       }),
     });
 
@@ -69,13 +71,8 @@ Return ONLY the improved content text. No explanations, no markdown headers, jus
           status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please add credits in Settings → Workspace → Usage." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
       const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
+      console.error("AI provider error:", response.status, t);
       return new Response(JSON.stringify({ error: "AI service error" }), {
         status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });

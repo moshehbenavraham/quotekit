@@ -13,7 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import heroAsset from "@/assets/hero-dashboard.png.asset.json";
+import heroAsset from "@/assets/hero-dashboard.svg";
 
 const features = [
   {
@@ -158,7 +158,7 @@ export default function Landing() {
           <div className="relative mx-auto mt-16 max-w-5xl animate-fade-in">
             <div className="rounded-xl border border-border bg-card p-2 shadow-2xl shadow-primary/10">
               <img
-                src={heroAsset.url}
+                src={heroAsset}
                 alt="QuoteKit proposal dashboard showing a professional proposal with pricing, status tracking, and client notifications"
                 className="w-full rounded-lg"
                 loading="eager"

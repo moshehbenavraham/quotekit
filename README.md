@@ -1,73 +1,80 @@
-# Welcome to your Lovable project
+# QuoteKit
 
-## Project info
+QuoteKit is a proposal and quote generation workspace for freelancers, agencies, and small businesses. It helps teams create branded proposals, manage clients and templates, build pricing tables, share client-facing links, and track proposal activity.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Stack
 
-## How can I edit this code?
+- React 18
+- TypeScript
+- Vite
+- Tailwind CSS
+- shadcn/ui
+- Supabase Auth, Database, and Edge Functions
+- OpenAI-compatible chat completions for proposal writing assistance
 
-There are several ways of editing your application.
+## Requirements
 
-**Use Lovable**
+- Node.js 20+
+- npm 10+
+- A Supabase project with auth enabled
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Environment
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Create a local environment file:
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+cp .env.example .env
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+Fill in the frontend Supabase values:
 
-# Step 3: Install the necessary dependencies.
-npm i
+```sh
+VITE_SUPABASE_PROJECT_ID=your-project-ref
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-supabase-anon-key
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+If you want Google sign-in, enable the Google provider in Supabase Auth and add your local and deployed app origins to the allowed redirect URLs.
+
+## Supabase Setup
+
+Apply the SQL migrations in `supabase/migrations` to provision the database.
+
+The Edge Functions use server-side secrets:
+
+```sh
+supabase secrets set OPENAI_API_KEY=your-api-key
+supabase secrets set OPENAI_MODEL=gpt-4o-mini
+```
+
+`OPENAI_MODEL` is optional and defaults to `gpt-4o-mini`.
+
+## Local Development
+
+```sh
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Production Build
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+npm run build
+npm run preview
+```
 
-**Use GitHub Codespaces**
+The compiled app is emitted to `dist/` and can be served by any static hosting provider.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Testing
 
-## What technologies are used for this project?
+```sh
+npm test
+npm run lint
+```
 
-This project is built with:
+## Deployment Notes
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- Configure the `VITE_SUPABASE_*` variables in the frontend deployment environment.
+- Deploy the Supabase migrations and Edge Functions with the Supabase CLI.
+- Configure `OPENAI_API_KEY` as an Edge Function secret.
+- Social preview metadata uses the local `public/social-card.svg` asset.
