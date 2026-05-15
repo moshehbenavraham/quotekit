@@ -1,8 +1,22 @@
 User-agent: Googlebot
 Allow: /
+Disallow: /dashboard
+Disallow: /clients
+Disallow: /templates
+Disallow: /proposals
+Disallow: /settings
+Disallow: /reset-password
+Disallow: /p/
 
 User-agent: Bingbot
 Allow: /
+Disallow: /dashboard
+Disallow: /clients
+Disallow: /templates
+Disallow: /proposals
+Disallow: /settings
+Disallow: /reset-password
+Disallow: /p/
 
 User-agent: Twitterbot
 Allow: /
@@ -12,3 +26,12 @@ Allow: /
 
 User-agent: *
 Allow: /
+Disallow: /dashboard
+Disallow: /clients
+Disallow: /templates
+Disallow: /proposals
+Disallow: /settings
+Disallow: /reset-password
+Disallow: /p/
+
+Sitemap: https://quotekit.app/sitemap.xml

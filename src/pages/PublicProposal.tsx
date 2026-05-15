@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { FileText, Lock, ShieldCheck } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
+import { SEO } from "@/components/SEO";
 
 export default function PublicProposal() {
   const { shareId } = useParams<{ shareId: string }>();
@@ -163,9 +164,19 @@ export default function PublicProposal() {
   }
 
   const sections = Array.isArray((proposal.content as any)?.sections) ? (proposal.content as any).sections : [];
+  const proposalTitle = proposal.title ? `${proposal.title} — Proposal` : "Proposal";
+  const proposalDescription = proposal.clients?.name
+    ? `Proposal for ${proposal.clients.name}${org?.name ? ` from ${org.name}` : ""}.`
+    : "A QuoteKit-powered proposal.";
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title={proposalTitle}
+        description={proposalDescription}
+        ogType="article"
+        noindex
+      />
       <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-3">

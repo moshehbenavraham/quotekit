@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/contexts/AuthContext";
 import { FileText } from "lucide-react";
 import { toast } from "sonner";
+import { SEO } from "@/components/SEO";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -41,6 +42,12 @@ export default function ResetPassword() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SEO
+        title="Set a new password — QuoteKit"
+        description="Choose a new password for your QuoteKit account."
+        canonicalPath="/reset-password"
+        noindex
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link to="/" className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary">

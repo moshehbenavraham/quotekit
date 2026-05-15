@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/contexts/AuthContext";
 import { FileText } from "lucide-react";
 import { toast } from "sonner";
+import { SEO } from "@/components/SEO";
 
 export default function Signup() {
   const [email, setEmail] = useState("");
@@ -37,6 +38,11 @@ export default function Signup() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SEO
+        title="Create your QuoteKit account"
+        description="Sign up free for QuoteKit and start sending branded, trackable proposals in minutes."
+        canonicalPath="/signup"
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link to="/" className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary">

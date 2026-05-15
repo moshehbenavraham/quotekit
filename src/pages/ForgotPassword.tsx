@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { useAuth } from "@/contexts/AuthContext";
 import { FileText, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
+import { SEO } from "@/components/SEO";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -28,6 +29,11 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <SEO
+        title="Reset your password — QuoteKit"
+        description="Reset the password on your QuoteKit account."
+        canonicalPath="/forgot-password"
+      />
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <Link to="/" className="mx-auto mb-4 flex h-10 w-10 items-center justify-center rounded-lg bg-primary">

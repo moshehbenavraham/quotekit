@@ -13,7 +13,33 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SEO, SITE_URL, SITE_NAME } from "@/components/SEO";
+import { SkipToContent } from "@/components/SkipToContent";
 import heroAsset from "@/assets/hero-dashboard.svg";
+
+const landingJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: SITE_NAME,
+  applicationCategory: "BusinessApplication",
+  operatingSystem: "Web",
+  url: SITE_URL,
+  description:
+    "QuoteKit helps freelancers, agencies, and small businesses create branded proposals, manage pricing, share client links, and track deal activity.",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  featureList: [
+    "AI-powered proposal writing",
+    "One-click client sharing",
+    "Real-time engagement tracking",
+    "Branded templates",
+    "Team collaboration",
+    "Analytics and insights",
+  ],
+};
 
 const features = [
   {
@@ -93,8 +119,18 @@ export default function Landing() {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      <SEO
+        title="QuoteKit — Win more deals with beautiful proposals"
+        description="Create, send, and track branded proposals that close. QuoteKit gives freelancers and teams AI-assisted writing, branded templates, secure share links, and real-time engagement analytics."
+        canonicalPath="/"
+        jsonLd={landingJsonLd}
+      />
+      <SkipToContent />
       {/* Nav */}
-      <nav className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg">
+      <nav
+        aria-label="Primary"
+        className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg"
+      >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
@@ -115,8 +151,9 @@ export default function Landing() {
         </div>
       </nav>
 
+      <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
       {/* Hero */}
-      <section className="relative overflow-hidden">
+      <section aria-labelledby="hero-heading" className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-accent/50 to-background" />
         <div className="relative mx-auto max-w-6xl px-4 sm:px-6 pb-20 pt-20 sm:pt-28">
           <div className="mx-auto max-w-3xl text-center">
@@ -124,7 +161,10 @@ export default function Landing() {
               <Sparkles className="h-3.5 w-3.5 text-primary" />
               Now with AI-powered content writing
             </div>
-            <h1 className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
+            <h1
+              id="hero-heading"
+              className="font-display text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+            >
               Win more deals with{" "}
               <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 beautiful proposals
@@ -308,6 +348,8 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      </main>
 
       {/* Footer */}
       <footer className="border-t border-border py-8">
