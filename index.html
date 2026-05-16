@@ -35,6 +35,31 @@
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!--
+      Theme bootstrap: applies the persisted (or OS-preferred) theme to
+      <html> before paint so the dark palette in src/index.css and the
+      next-themes provider land on the same value. Keep the storageKey in
+      sync with src/components/theme-provider.tsx.
+    -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem('quotekit-theme');
+          var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+          var theme = stored && stored !== 'system'
+            ? stored
+            : (prefersDark ? 'dark' : 'light');
+          var root = document.documentElement;
+          if (theme === 'dark') root.classList.add('dark');
+          else root.classList.remove('dark');
+          root.style.colorScheme = theme;
+        } catch (_) {
+          /* localStorage unavailable (private mode, CSP) — fall back to
+             whatever the CSS default is. */
+        }
+      })();
+    </script>
   </head>
 
   <body>

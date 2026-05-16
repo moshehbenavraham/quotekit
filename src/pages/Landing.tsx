@@ -15,6 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { SEO, SITE_URL, SITE_NAME } from "@/components/SEO";
 import { SkipToContent } from "@/components/SkipToContent";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import heroAsset from "@/assets/hero-dashboard.svg";
 
 const landingJsonLd = {
@@ -140,7 +141,8 @@ export default function Landing() {
               QuoteKit
             </span>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <ThemeToggle />
             <Button variant="ghost" size="sm" onClick={() => navigate("/login")}>
               Sign in
             </Button>
