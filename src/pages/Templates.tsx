@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -51,7 +51,6 @@ export default function Templates() {
   const [templates, setTemplates] = useState<Template[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
-  const navigate = useNavigate();
 
   // Dialog state
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -180,45 +179,67 @@ export default function Templates() {
           </div>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <Card
-              className="cursor-pointer border-dashed hover:border-primary/40 transition-colors"
-              onClick={() => navigate("/proposals/new")}
-            >
-              <CardContent className="flex flex-col items-center justify-center h-48 gap-3">
-                <PlusCircle className="h-8 w-8 text-muted-foreground" />
-                <p className="font-medium text-muted-foreground">Start from blank</p>
-              </CardContent>
+            <Card className="border-dashed transition-colors focus-within:border-primary/60 hover:border-primary/40">
+              <Link
+                to="/proposals/new"
+                className="block h-full rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                <CardContent className="flex flex-col items-center justify-center h-48 gap-3">
+                  <PlusCircle className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
+                  <p className="font-medium text-muted-foreground">Start from blank</p>
+                </CardContent>
+              </Link>
             </Card>
 
             {filtered.map((t) => {
               const Icon = categoryIcons[t.category] ?? FileText;
+              const usePath = `/proposals/new?template=${t.id}`;
               return (
-                <Card key={t.id} className="group relative hover:shadow-md hover:border-primary/20 transition-all">
+                <Card
+                  key={t.id}
+                  className="group relative transition-all hover:shadow-md hover:border-primary/20 focus-within:border-primary/40 focus-within:shadow-md"
+                >
                   <CardContent className="flex flex-col justify-between h-48 p-6">
                     <div>
                       <div className="flex items-center justify-between mb-3">
                         <div className="flex items-center gap-2">
                           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-accent">
-                            <Icon className="h-4 w-4 text-accent-foreground" />
+                            <Icon className="h-4 w-4 text-accent-foreground" aria-hidden="true" />
                           </div>
                           {t.is_default && <Badge variant="outline" className="text-xs">Default</Badge>}
                         </div>
                         {!t.is_default && (
-                          <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={(e) => { e.stopPropagation(); openEdit(t); }}>
-                              <Pencil className="h-3 w-3" />
+                          <div className="flex gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100 sm:group-focus-within:opacity-100">
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              aria-label={`Edit ${t.name}`}
+                              onClick={() => openEdit(t)}
+                            >
+                              <Pencil className="h-3 w-3" aria-hidden="true" />
                             </Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive" onClick={(e) => { e.stopPropagation(); handleDelete(t.id); }}>
-                              <Trash2 className="h-3 w-3" />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-destructive"
+                              aria-label={`Delete ${t.name}`}
+                              onClick={() => handleDelete(t.id)}
+                            >
+                              <Trash2 className="h-3 w-3" aria-hidden="true" />
                             </Button>
                           </div>
                         )}
                       </div>
-                      <h3
-                        className="font-display font-semibold text-card-foreground cursor-pointer hover:text-primary transition-colors"
-                        onClick={() => navigate(`/proposals/new?template=${t.id}`)}
-                      >
-                        {t.name}
+                      <h3 className="font-display font-semibold text-card-foreground">
+                        <Link
+                          to={usePath}
+                          className="rounded hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          {t.name}
+                        </Link>
                       </h3>
                       <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{t.description}</p>
                     </div>
@@ -226,13 +247,10 @@ export default function Templates() {
                       <Badge variant="secondary" className="w-fit text-xs">
                         {categoryLabels[t.category] ?? t.category}
                       </Badge>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-xs"
-                        onClick={() => navigate(`/proposals/new?template=${t.id}`)}
-                      >
-                        Use template →
+                      <Button asChild size="sm" variant="ghost" className="text-xs">
+                        <Link to={usePath} aria-label={`Use template ${t.name}`}>
+                          Use template <span aria-hidden="true">→</span>
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

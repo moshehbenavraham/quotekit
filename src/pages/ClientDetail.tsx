@@ -83,8 +83,13 @@ export default function ClientDetail() {
     <DashboardLayout>
       <div className="space-y-6">
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate("/clients")}>
-            <ArrowLeft className="h-4 w-4" />
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Back to clients"
+            onClick={() => navigate("/clients")}
+          >
+            <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           </Button>
           <div>
             <h1 className="font-display text-2xl font-bold text-foreground">{client.name}</h1>
@@ -171,8 +176,15 @@ export default function ClientDetail() {
                 </TableHeader>
                 <TableBody>
                   {proposals.map((p) => (
-                    <TableRow key={p.id} className="cursor-pointer" onClick={() => navigate(`/proposals/${p.id}`)}>
-                      <TableCell className="font-medium">{p.title}</TableCell>
+                    <TableRow key={p.id} className="focus-within:bg-muted/40">
+                      <TableCell className="font-medium">
+                        <Link
+                          to={`/proposals/${p.id}`}
+                          className="block rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          {p.title}
+                        </Link>
+                      </TableCell>
                       <TableCell>
                         <Badge variant="outline" className={statusColors[p.status]}>{p.status}</Badge>
                       </TableCell>

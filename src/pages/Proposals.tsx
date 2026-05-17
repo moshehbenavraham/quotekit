@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { DashboardLayout } from "@/components/DashboardLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -46,7 +46,6 @@ type SortDir = "asc" | "desc";
 
 export default function Proposals() {
   const { user, role } = useAuth();
-  const navigate = useNavigate();
   const [proposals, setProposals] = useState<Proposal[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -160,14 +159,29 @@ export default function Proposals() {
     load();
   };
 
-  const SortableHead = ({ label, sortKeyName, className }: { label: string; sortKeyName: SortKey; className?: string }) => (
-    <TableHead className={className}>
-      <button className="flex items-center gap-1 hover:text-foreground transition-colors" onClick={() => handleSort(sortKeyName)}>
-        {label}
-        <ArrowUpDown className={`h-3 w-3 ${sortKey === sortKeyName ? "text-foreground" : "text-muted-foreground/50"}`} />
-      </button>
-    </TableHead>
-  );
+  const SortableHead = ({ label, sortKeyName, className }: { label: string; sortKeyName: SortKey; className?: string }) => {
+    const isSorted = sortKey === sortKeyName;
+    const ariaSort: "ascending" | "descending" | "none" = isSorted
+      ? sortDir === "asc"
+        ? "ascending"
+        : "descending"
+      : "none";
+    return (
+      <TableHead className={className} aria-sort={ariaSort}>
+        <button
+          type="button"
+          className="flex items-center gap-1 rounded hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          onClick={() => handleSort(sortKeyName)}
+        >
+          {label}
+          <ArrowUpDown
+            aria-hidden="true"
+            className={`h-3 w-3 ${isSorted ? "text-foreground" : "text-muted-foreground/50"}`}
+          />
+        </button>
+      </TableHead>
+    );
+  };
 
   return (
     <DashboardLayout>
@@ -235,8 +249,15 @@ export default function Proposals() {
                 </TableHeader>
                 <TableBody>
                   {sorted.map((p) => (
-                    <TableRow key={p.id} className="cursor-pointer" onClick={() => navigate(`/proposals/${p.id}`)}>
-                      <TableCell className="font-medium">{p.title}</TableCell>
+                    <TableRow key={p.id} className="group focus-within:bg-muted/40">
+                      <TableCell className="font-medium">
+                        <Link
+                          to={`/proposals/${p.id}`}
+                          className="block rounded hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                        >
+                          {p.title}
+                        </Link>
+                      </TableCell>
                       <TableCell>{p.clients?.name ?? "—"}</TableCell>
                       <TableCell>
                         <Badge variant="outline" className={statusColors[p.status]}>{p.status}</Badge>
@@ -246,18 +267,24 @@ export default function Proposals() {
                       <TableCell className="text-muted-foreground">{format(new Date(p.updated_at), "MMM d, yyyy")}</TableCell>
                       <TableCell>
                         <DropdownMenu>
-                          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreHorizontal className="h-4 w-4" />
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="h-8 w-8"
+                              aria-label={`Actions for ${p.title}`}
+                            >
+                              <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" onClick={(e) => e.stopPropagation()}>
+                          <DropdownMenuContent align="end">
                             <DropdownMenuItem onClick={() => handleDuplicate(p)}>
-                              <Copy className="mr-2 h-4 w-4" /> Duplicate
+                              <Copy className="mr-2 h-4 w-4" aria-hidden="true" /> Duplicate
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem className="text-destructive" onClick={() => setDeleteTarget(p)}>
-                              <Trash2 className="mr-2 h-4 w-4" /> Delete
+                              <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" /> Delete
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

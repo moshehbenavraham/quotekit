@@ -305,8 +305,13 @@ export default function ProposalDetail() {
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon" onClick={() => navigate("/proposals")}>
-              <ArrowLeft className="h-4 w-4" />
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Back to proposals"
+              onClick={() => navigate("/proposals")}
+            >
+              <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             </Button>
             <div>
               <h1 className="font-display text-2xl font-bold text-foreground">{proposal.title}</h1>
@@ -335,8 +340,13 @@ export default function ProposalDetail() {
             {/* Actions dropdown */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="h-9 w-9">
-                  <MoreHorizontal className="h-4 w-4" />
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="h-9 w-9"
+                  aria-label="Proposal actions"
+                >
+                  <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
